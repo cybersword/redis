@@ -320,16 +320,31 @@ listNode *listIndex(list *list, long index) {
 
 /* Rotate the list removing the tail node and inserting it to the head. */
 void listRotate(list *list) {
-    listNode *tail = list->tail;
+//    listNode *tail = list->tail;
+//
+//    if (listLength(list) <= 1) return;
+//
+//    /* Detach current tail */
+//    list->tail = tail->prev;
+//    list->tail->next = NULL;
+//    /* Move it as head */
+//    list->head->prev = tail;
+//    tail->prev = NULL;
+//    tail->next = list->head;
+//    list->head = tail;
 
-    if (listLength(list) <= 1) return;
+    // My implementation
+    if (listLength(list) <= 1) {
+        return;
+    }
 
-    /* Detach current tail */
-    list->tail = tail->prev;
+    /* Make list to a loop */
+    list->tail->next = listFirst(list);
+    list->head->prev = listLast(list);
+    /* Set new tail and head */
+    list->head = listLast(list);
+    list->tail = listLast(list)->prev;
+    /* Break loop to rotated list */
     list->tail->next = NULL;
-    /* Move it as head */
-    list->head->prev = tail;
-    tail->prev = NULL;
-    tail->next = list->head;
-    list->head = tail;
+    list->head->prev = NULL;
 }
